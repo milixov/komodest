@@ -4,6 +4,7 @@ import enKeys from './lang/en.json'
 
 i18n
     .init({
+        lng: 'en',
         fallbackLng: 'en',
         resources: {
             en: enKeys
