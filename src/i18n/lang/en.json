@@ -1,4 +1,8 @@
 {
+    "drawer": {
+        "title": "Menu",
+        "home": "Home"
+    },
     "home": {
         "title": "Home",
         "topDesigner": "Top Designer",
