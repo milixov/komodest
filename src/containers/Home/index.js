@@ -38,6 +38,13 @@ const Home = () => {
                         keyExtractor={item => item.id}
                     />
                     <Section title={t('popularDesign')} action={() => console.log('#')} />
+                    <View style={{width: 375, height: 520, paddingHorizontal: 16, display: 'flex', flexDirection: 'row', alignContent: 'stretch', alignItems: 'flex-start' ,justifyContent: 'space-between', flexWrap: 'wrap', flexBasis: 'auto'}}>
+                        {/* <View style={{backgroundColor: 'red' ,height: 100, width: 343}}><Text>A</Text></View> */}
+                        <View style={{backgroundColor: 'blue' ,height: 100, width: 150}}><Text>B</Text></View>
+                        <View style={{backgroundColor: 'green' ,height: 200, width: 150}}><Text>C</Text></View>
+                        <View style={{backgroundColor: 'yellow' ,height: 200, width: 150}}><Text>D</Text></View>
+                        <View style={{backgroundColor: 'purple' ,height: 100, width: 150}}><Text>E</Text></View>
+                    </View>
                 </Surface>
             </ScrollView>
             <StatusBar style="auto" />
