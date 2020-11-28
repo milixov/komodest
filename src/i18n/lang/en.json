@@ -6,6 +6,7 @@
     "home": {
         "title": "Home",
         "topDesigner": "Top Designer",
-        "popularDesign": "Popular Design"
+        "popularDesign": "Popular Design",
+        "usersEmpty": "This is Empty"
     }
 }

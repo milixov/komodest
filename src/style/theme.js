@@ -27,7 +27,7 @@ export default {
       accent: '#F1E7E7',
       background: '#F4F6FC',
       surface: '#F4F6FC',
-      text: '#3B3B3B',
+      text: '#1A0101',
       backdrop: '#F4F6FC'
     },
   };

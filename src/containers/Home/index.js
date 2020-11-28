@@ -1,7 +1,7 @@
 import React from 'react'
-import { StyleSheet, ScrollView } from 'react-native'
 
 //rn components
+import { StyleSheet, ScrollView, FlatList, View } from 'react-native'
 import { StatusBar } from 'expo-status-bar';
 import { Surface, Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,20 +9,35 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 //i18n
 import { useTranslation } from 'react-i18next';
 
-//components
-import UseGetUser from '../../hooks/api/useGetUser'
+//hooks
+import useGetUser from '../../hooks/api/useGetUser'
+import useGetPost from '../../hooks/api/useGetPost'
+
+//component
+import Section from '../../components/Section'
+import UserAvatar, { Skeleton } from '../../components/UserAvatar'
 
 const Home = () => {
 
-    const { t } = useTranslation('home')
-
-    const [data, loading] = UseGetUser();
+    const { t } = useTranslation('home');
+    const [users] = useGetUser();
+    const [posts] = useGetPost();
 
     return (
         <SafeAreaView>
             <ScrollView>
                 <Surface style={styles.surface}>
-                    <Text>This page is: {t('topDesigner')}</Text>
+                    <Section title={t('topDesigner')} action={() => console.log('#')} />
+                    <FlatList
+                        horizontal
+                        contentContainerStyle={styles.userList}
+                        data={users && users.data || []}
+                        renderItem={props => <UserAvatar {...props}/>}
+                        ItemSeparatorComponent={() => <View style={styles.divider}/>}
+                        ListEmptyComponent={() => <Skeleton/>}
+                        keyExtractor={item => item.id}
+                    />
+                    <Section title={t('popularDesign')} action={() => console.log('#')} />
                 </Surface>
             </ScrollView>
             <StatusBar style="auto" />
@@ -35,6 +50,13 @@ const styles = StyleSheet.create({
         elevation: 0,
         flex: 1,
     },
+    divider: {
+        width: 20   
+    },
+    userList: {
+        paddingHorizontal: 16,
+        marginVertical: 16
+    }
 });
 
 export default Home;
