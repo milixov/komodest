@@ -9,7 +9,7 @@ const DrawerContent = (props) => {
     const { t } = useTranslation('drawer')
     const { colors } = useTheme();
 
-    function handleItemPress(item) {
+    const handleItemPress = (item) => {
         if (isFocused) {
             navigation.closeDrawer()
         } else {

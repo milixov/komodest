@@ -10,10 +10,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
 //components
+import UseGetUser from '../../hooks/api/useGetUser'
 
 const Home = () => {
 
     const { t } = useTranslation('home')
+
+    const [data, loading] = UseGetUser();
 
     return (
         <SafeAreaView>
