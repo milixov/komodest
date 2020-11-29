@@ -5,7 +5,7 @@ import { getQuery } from '@redux-requests/core';
 import T, { fetchUser } from '../../store/actions'
 import WS from '../../config/ws'
 
-const UseGetUser = (page, limit) => {
+export const useGetUser = (page, limit) => {
 
     const dispatch = useDispatch()
     const state = useSelector(state => state);
@@ -17,5 +17,3 @@ const UseGetUser = (page, limit) => {
 
     return data;
 }
-
-export default UseGetUser;

@@ -10,5 +10,11 @@ export default {
             url: `/post?page=${page}&limit=${limit}`,
             method: 'GET'
         }
+    },
+    getPostById: (id) => {
+        return {
+            url: `/post/${id}`,
+            method: 'GET'
+        }
     }
 }

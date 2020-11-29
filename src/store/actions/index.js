@@ -17,4 +17,12 @@ export const fetchPosts = request => ({
     }
 })
 
+export const fetchPostById = request => ({
+    type: T.GET_POST_BY_ID,
+    request,
+    meta: {
+        cache: CACHE_TIME
+    }
+})
+
 export default T

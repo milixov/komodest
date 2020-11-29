@@ -41,8 +41,9 @@ const Navigation = () => {
     return (
         <NavigationContainer theme={ScreenTheme}>
             <Stack.Navigator
-                initialRouteName="index">
-                <Stack.Screen name="index" component={Index} options={{ header: props => <HomeHeader {...props} /> }}/>
+                headerMode="screen"
+                initialRouteName="detail">
+                <Stack.Screen name="index" component={Index} options={{ header: props => <HomeHeader {...props} />}}/>
                 <Stack.Screen name="detail" component={Detail} options={{headerTransparent: true}}/>
             </Stack.Navigator>
         </NavigationContainer>

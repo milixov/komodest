@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { useNavigation } from '@react-navigation/native';
 
 //rn components
 import { StyleSheet, ScrollView, FlatList, View, Dimensions, Image } from 'react-native'
@@ -10,8 +11,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
 //hooks
-import useGetUser from '../../hooks/api/useGetUser'
-import useGetPost from '../../hooks/api/useGetPost'
+import {useGetUser} from '../../hooks/api/useGetUser'
+import {useGetPost} from '../../hooks/api/useGetPost'
 
 //component
 import Section from '../../components/Section'
@@ -24,6 +25,7 @@ const { masonHeight, padding, gap } = HOME_PAGE
 const Home = () => {
 
     const { t } = useTranslation('home');
+    const { navigate } = useNavigation()
     const users = useGetUser(1, 10);
     const posts = useGetPost(1, 5);
 
@@ -61,7 +63,7 @@ const Home = () => {
                     <View style={styles.frame}>
                         <View style={[styles.mason, { height: 145, width: frameWidth }]}>
                             {posts && posts.data && Array.isArray(posts.data) &&
-                                <TouchableRipple onPress={() => console.log(posts.data[0].id)}>
+                                <TouchableRipple onPress={() => navigate('detail', {postId: posts.data[0].id})}>
                                     <Image source={{ uri: posts.data[0].image }} style={{ height: 145, width: frameWidth }} />
                                 </TouchableRipple>
                             }
@@ -76,7 +78,7 @@ const Home = () => {
                         {
                             postMason && Array.isArray(postMason) && postMason.map(item =>
                                 <View key={`${item.id}`} style={[styles.mason, { height: item.masonHeight, width: masonWidth }]}>
-                                    <TouchableRipple onPress={() => console.log(item.id)}>
+                                    <TouchableRipple onPress={() => navigate('detail', {postId: item.id})}>
                                         <Image source={{ uri: item.image }} style={{ height: item.masonHeight, width: masonWidth }} />
                                     </TouchableRipple>
                                 </View>)
