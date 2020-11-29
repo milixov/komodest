@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 //rn components
-import { StyleSheet, ScrollView, FlatList, View } from 'react-native'
+import { StyleSheet, ScrollView, FlatList, View, Dimensions, Image } from 'react-native'
 import { StatusBar } from 'expo-status-bar';
-import { Surface, Text } from 'react-native-paper';
+import { Surface, TouchableRipple } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 //i18n
@@ -17,11 +17,30 @@ import useGetPost from '../../hooks/api/useGetPost'
 import Section from '../../components/Section'
 import UserAvatar, { Skeleton } from '../../components/UserAvatar'
 
+const padding = 16;
+const gap = 14
+
 const Home = () => {
 
     const { t } = useTranslation('home');
-    const [users] = useGetUser();
-    const [posts] = useGetPost();
+    const users = useGetUser(1, 10);
+    const posts = useGetPost(1, 5);
+
+    const frameWidth = useMemo(() => {
+        return Dimensions.get('screen').width - padding * 2
+    }, [Dimensions.get('screen').width])
+
+    const masonWidth = useMemo(() => {
+        return (frameWidth - gap) / 2
+    }, [Dimensions.get('screen').width])
+
+    const postMason = useMemo(() => {
+        if (posts && Array.isArray(posts.data)) {
+            const masonHeight = [146, 191, 217, 117]
+            let data = posts.data.slice(1, posts.data.length);
+            return data.map((item, index) => ({ ...item, masonHeight: masonHeight[index] }))
+        }
+    }, [posts])
 
     return (
         <SafeAreaView>
@@ -31,19 +50,29 @@ const Home = () => {
                     <FlatList
                         horizontal
                         contentContainerStyle={styles.userList}
-                        data={users && users.data || []}
-                        renderItem={props => <UserAvatar {...props}/>}
-                        ItemSeparatorComponent={() => <View style={styles.divider}/>}
-                        ListEmptyComponent={() => <Skeleton/>}
+                        data={users && Array.isArray(users.data) && users.data || []}
+                        renderItem={props => <UserAvatar {...props} />}
+                        ItemSeparatorComponent={() => <View style={styles.divider} />}
+                        ListEmptyComponent={() => <Skeleton />}
                         keyExtractor={item => item.id}
                     />
                     <Section title={t('popularDesign')} action={() => console.log('#')} />
-                    <View style={{width: 375, height: 520, paddingHorizontal: 16, display: 'flex', flexDirection: 'row', alignContent: 'stretch', alignItems: 'flex-start' ,justifyContent: 'space-between', flexWrap: 'wrap', flexBasis: 'auto'}}>
-                        {/* <View style={{backgroundColor: 'red' ,height: 100, width: 343}}><Text>A</Text></View> */}
-                        <View style={{backgroundColor: 'blue' ,height: 100, width: 150}}><Text>B</Text></View>
-                        <View style={{backgroundColor: 'green' ,height: 200, width: 150}}><Text>C</Text></View>
-                        <View style={{backgroundColor: 'yellow' ,height: 200, width: 150}}><Text>D</Text></View>
-                        <View style={{backgroundColor: 'purple' ,height: 100, width: 150}}><Text>E</Text></View>
+                    <View style={styles.frame}>
+                        <View style={[styles.mason, { height: 145, width: frameWidth }]}>
+                            {posts && posts.data && Array.isArray(posts.data) &&
+                                <TouchableRipple onPress={() => console.log(posts.data[0].id)}>
+                                    <Image source={{ uri: posts.data[0].image }} style={{ height: 145, width: frameWidth }} />
+                                </TouchableRipple>
+                            }
+                        </View>
+                    </View>
+                    <View style={styles.masonry}>
+                        {postMason && Array.isArray(postMason) && postMason.map((item, index) =>
+                            <View key={`${item.id}`} style={[styles.mason, { height: item.masonHeight, width: masonWidth }]}>
+                                <TouchableRipple onPress={() => console.log(item.id)}>
+                                    <Image source={{ uri: item.image }} style={{ height: item.masonHeight, width: masonWidth }} />
+                                </TouchableRipple>
+                            </View>)}
                     </View>
                 </Surface>
             </ScrollView>
@@ -58,11 +87,30 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     divider: {
-        width: 20   
+        width: 20
+    },
+    frame: {
+        paddingHorizontal: padding,
+        marginTop: padding
     },
     userList: {
-        paddingHorizontal: 16,
-        marginVertical: 16
+        paddingHorizontal: padding,
+        marginVertical: padding
+    },
+    mason: {
+        borderRadius: 10,
+        backgroundColor: '#F1E7E7',
+        overflow: 'hidden'
+    },
+    masonry: {
+        display: 'flex',
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+        marginVertical: gap,
+        height: 337 + gap,
+        alignContent: 'space-between',
+        justifyContent: 'space-between',
+        paddingHorizontal: padding
     }
 });
 

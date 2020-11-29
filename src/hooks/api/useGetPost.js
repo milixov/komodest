@@ -5,17 +5,17 @@ import { getQuery } from '@redux-requests/core';
 import T, { fetchPosts } from '../../store/actions'
 import WS from '../../config/ws'
 
-const UseGetPost = () => {
+const UseGetPost = (page, limit) => {
 
     const dispatch = useDispatch()
     const state = useSelector(state => state);
     const { data } = getQuery(state, { type: T.GET_POST });
     
     useEffect(()=> {
-        dispatch(fetchPosts(WS.getPost(1, 5)))
+        dispatch(fetchPosts(WS.getPost(page, limit)))
     }, [])
 
-    return [data];
+    return data;
 }
 
 export default UseGetPost;

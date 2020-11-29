@@ -5,17 +5,17 @@ import { getQuery } from '@redux-requests/core';
 import T, { fetchUser } from '../../store/actions'
 import WS from '../../config/ws'
 
-const UseGetUser = () => {
+const UseGetUser = (page, limit) => {
 
     const dispatch = useDispatch()
     const state = useSelector(state => state);
     const { data } = getQuery(state, { type: T.GET_USER });
     
     useEffect(()=> {
-        dispatch(fetchUser(WS.getUser(1, 10)))
+        dispatch(fetchUser(WS.getUser(page, limit)))
     }, [])
 
-    return [data];
+    return data;
 }
 
 export default UseGetUser;
