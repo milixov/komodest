@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 //rn components
 import { StyleSheet, ScrollView, FlatList, View, Dimensions, Image } from 'react-native'
 import { StatusBar } from 'expo-status-bar';
-import { Surface, TouchableRipple } from 'react-native-paper';
+import { Surface, TouchableRipple, Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 //i18n
@@ -17,8 +17,9 @@ import useGetPost from '../../hooks/api/useGetPost'
 import Section from '../../components/Section'
 import UserAvatar, { Skeleton } from '../../components/UserAvatar'
 
-const padding = 16;
-const gap = 14
+//enum
+import { HOME_PAGE } from '../../config/enums'
+const { masonHeight, padding, gap } = HOME_PAGE
 
 const Home = () => {
 
@@ -36,7 +37,7 @@ const Home = () => {
 
     const postMason = useMemo(() => {
         if (posts && Array.isArray(posts.data)) {
-            const masonHeight = [146, 191, 217, 117]
+
             let data = posts.data.slice(1, posts.data.length);
             return data.map((item, index) => ({ ...item, masonHeight: masonHeight[index] }))
         }
@@ -67,12 +68,19 @@ const Home = () => {
                         </View>
                     </View>
                     <View style={styles.masonry}>
-                        {postMason && Array.isArray(postMason) && postMason.map((item, index) =>
-                            <View key={`${item.id}`} style={[styles.mason, { height: item.masonHeight, width: masonWidth }]}>
-                                <TouchableRipple onPress={() => console.log(item.id)}>
-                                    <Image source={{ uri: item.image }} style={{ height: item.masonHeight, width: masonWidth }} />
-                                </TouchableRipple>
-                            </View>)}
+                        {
+                            !posts && masonHeight.map((item, index) =>
+                                <View key={`mason_sk_${index}`} style={[styles.mason, { height: item, width: masonWidth }]} />)
+
+                        }
+                        {
+                            postMason && Array.isArray(postMason) && postMason.map(item =>
+                                <View key={`${item.id}`} style={[styles.mason, { height: item.masonHeight, width: masonWidth }]}>
+                                    <TouchableRipple onPress={() => console.log(item.id)}>
+                                        <Image source={{ uri: item.image }} style={{ height: item.masonHeight, width: masonWidth }} />
+                                    </TouchableRipple>
+                                </View>)
+                        }
                     </View>
                 </Surface>
             </ScrollView>
@@ -98,7 +106,7 @@ const styles = StyleSheet.create({
         marginVertical: padding
     },
     mason: {
-        borderRadius: 10,
+        borderRadius: 8,
         backgroundColor: '#F1E7E7',
         overflow: 'hidden'
     },
