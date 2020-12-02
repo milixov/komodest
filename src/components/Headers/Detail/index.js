@@ -1,9 +1,9 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 
-import { Surface, Appbar, Avatar } from 'react-native-paper';
+import { Appbar } from 'react-native-paper';
 
-import { useNavigation, DrawerActions } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const HomeHeader = () => {
 
@@ -11,7 +11,7 @@ const HomeHeader = () => {
 
     return (
         <Appbar.Header style={styles.header}>
-            <Appbar.BackAction />
+            <Appbar.BackAction onPress={() => navigation.goBack()}/>
             <Appbar.Content title="" subtitle="" />
             <Appbar.Action icon="heart-outline" />
             <Appbar.Action icon="share" />

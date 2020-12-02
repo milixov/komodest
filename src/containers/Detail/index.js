@@ -41,7 +41,12 @@ const Detail = () => {
                                 <View style={styles.handle} />
                             </View>
                             <View style={styles.content}>
-                                {!data && <View style={styles.titleSkeleton} />}
+                                {!data && <View>
+                                    <View style={styles.titleSkeleton} />
+                                    <View>
+                                        {[100,150,90].map((item, index) => <View key={`det_sk_${index}`} style={[styles.contentSkeleton, {width: item}]}/>)}
+                                    </View>
+                                </View>}
                                 {data && <>
                                     <View>
                                         <Title>{data.text}</Title>
@@ -120,6 +125,13 @@ const styles = StyleSheet.create({
     titleSkeleton: {
         height: 30,
         width: 130,
+        backgroundColor: Theme.colors.accent,
+        borderRadius: 6,
+        marginBottom: 20,
+    },
+    contentSkeleton: {
+        marginTop: 4,
+        height: 20,
         backgroundColor: Theme.colors.accent,
         borderRadius: 6,
     },
