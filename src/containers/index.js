@@ -16,6 +16,7 @@ import NavigationDrawer from '../components/Drawer'
 
 //header cp
 import HomeHeader from '../components/Headers/Home'
+import DetailHeader from '../components/Headers/Detail'
 
 const Stack = createStackNavigator();
 
@@ -42,9 +43,9 @@ const Navigation = () => {
         <NavigationContainer theme={ScreenTheme}>
             <Stack.Navigator
                 headerMode="screen"
-                initialRouteName="detail">
+                initialRouteName="index">
                 <Stack.Screen name="index" component={Index} options={{ header: props => <HomeHeader {...props} />}}/>
-                <Stack.Screen name="detail" component={Detail} options={{headerTransparent: true}}/>
+                <Stack.Screen name="detail" component={Detail} options={{headerTransparent: true, header: props => <DetailHeader {...props}/>}}/>
             </Stack.Navigator>
         </NavigationContainer>
     )
