@@ -3,7 +3,7 @@ import { useRoute } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/stack';
 
 //rn-components
-import { ScrollView, View, Image, Dimensions, StyleSheet } from 'react-native';
+import { ScrollView, View, Image, Dimensions, StyleSheet, FlatList } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Avatar, Surface, Text, Title, Caption } from 'react-native-paper'
 
@@ -14,11 +14,19 @@ import { useGetPostById } from '../../hooks/api/useGetPost'
 import Theme from '../../style/theme'
 import { useTranslation } from 'react-i18next';
 
+//users
+import T from '../../store/actions'
+import { useSelector } from 'react-redux';
+import { getQuery } from '@redux-requests/core';
+
 const Detail = () => {
+
+    const state = useSelector(state => state)
+    const { data } = getQuery(state, { type: T.GET_USER })
 
     const { params } = useRoute()
     const { t } = useTranslation('detail')
-    const data = useGetPostById(params && params.postId || null)
+    const post = useGetPostById(params && params.postId || null)
 
     const screenWidht = useMemo(() => {
         return Dimensions.get('screen').width
@@ -33,7 +41,7 @@ const Detail = () => {
     return (
         <>
             <View style={styles.container}>
-                <Image source={{ uri: data && data.image || '' }} style={[styles.image, { width: screenWidht }]} />
+                <Image source={{ uri: post && post.image || '' }} style={[styles.image, { width: screenWidht }]} />
                 <ScrollView style={[styles.view, { height: screenHeight - headerHeight, top: headerHeight }]}>
                     <Surface style={[styles.surface, { height: screenHeight - headerHeight, top: headerHeight }]}>
                         <ScrollView>
@@ -41,32 +49,32 @@ const Detail = () => {
                                 <View style={styles.handle} />
                             </View>
                             <View style={styles.content}>
-                                {!data && <View>
+                                {!post && <View>
                                     <View style={styles.titleSkeleton} />
                                     <View>
-                                        {[100,150,90].map((item, index) => <View key={`det_sk_${index}`} style={[styles.contentSkeleton, {width: item}]}/>)}
+                                        {[100, 150, 90].map((item, index) => <View key={`det_sk_${index}`} style={[styles.contentSkeleton, { width: item }]} />)}
                                     </View>
                                 </View>}
-                                {data && <>
+                                {post && <>
                                     <View>
-                                        <Title>{data.text}</Title>
+                                        <Title>{post.text}</Title>
                                     </View>
                                     <View style={styles.avatarContainer}>
                                         <View>
-                                            <Avatar.Image source={{ uri: data.owner.picture }} size={40} />
+                                            <Avatar.Image source={{ uri: post.owner.picture }} size={40} />
                                         </View >
                                         <View style={styles.avatarTextContainer}>
                                             <View>
-                                                <Text style={styles.name}>{`${data.owner.firstName} ${data.owner.lastName}`}</Text>
+                                                <Text style={styles.name}>{`${post.owner.firstName} ${post.owner.lastName}`}</Text>
                                             </View>
                                             <View>
-                                                <Caption style={styles.caption}>{data.owner.email}</Caption>
+                                                <Caption style={styles.caption}>{post.owner.email}</Caption>
                                             </View>
                                         </View>
                                     </View>
                                     <View style={styles.tags}>
-                                        {data.tags && Array.isArray(data.tags)
-                                            && data.tags.map(item => <Text key={`tag_${item}`} style={styles.tag}>{item}</Text>)}
+                                        {post.tags && Array.isArray(post.tags)
+                                            && post.tags.map(item => <Text key={`tag_${item}`} style={styles.tag}>{item}</Text>)}
                                     </View>
                                     <View style={styles.lorem}>
                                         <Text>{t('lorem')}</Text>
@@ -74,9 +82,15 @@ const Detail = () => {
                                     <Title>{t('gallery')}</Title>
                                 </>}
                             </View>
-                            <View style={styles.gallery}>
+                            { post && 
+                                <FlatList
+                                    style={styles.gallery}
+                                    horizontal
+                                    data={data && data.data && Array.isArray(data.data) && data.data || []}
+                                    keyExtractor={item => item.id}
+                                    renderItem={({item}) => <Image style={styles.galleryImage} source={{ uri: item.picture }} />} />
+                            }
 
-                            </View>
                         </ScrollView>
                     </Surface>
                 </ScrollView>
@@ -93,6 +107,17 @@ const styles = StyleSheet.create({
         left: 0,
         bottom: 0,
         right: 0,
+    },
+    gallery: {
+        marginTop: 20,
+        paddingHorizontal: 40
+    },
+    galleryImage: {
+        height: 130,
+        width: 130,
+        borderRadius: 8,
+        overflow: 'hidden',
+        marginEnd: 12,
     },
     view: {
         position: 'absolute',
