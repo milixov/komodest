@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { getQuery } from '@redux-requests/core';
+import { getQuery, resetRequests } from '@redux-requests/core';
 
 import T, { fetchPosts, fetchPostById } from '../../store/actions'
 import WS from '../../config/ws'
@@ -27,6 +27,10 @@ export const useGetPostById = (id) => {
     useEffect(()=> {
         if(id) {
             dispatch(fetchPostById(WS.getPostById(id)))
+        }
+
+        return () => {
+            dispatch(resetRequests([T.GET_POST_BY_ID]))
         }
     }, [])
 
