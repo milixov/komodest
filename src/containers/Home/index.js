@@ -22,6 +22,9 @@ import UserAvatar, { Skeleton } from '../../components/UserAvatar'
 import { HOME_PAGE } from '../../config/enums'
 const { masonHeight, padding, gap } = HOME_PAGE
 
+//theme
+import Theme from '../../style/theme'
+
 const Home = () => {
 
     const { t } = useTranslation('home');
@@ -109,7 +112,7 @@ const styles = StyleSheet.create({
     },
     mason: {
         borderRadius: 8,
-        backgroundColor: '#F1E7E7',
+        backgroundColor: Theme.colors.accent,
         overflow: 'hidden'
     },
     masonry: {
